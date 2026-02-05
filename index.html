@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unlocks on Feb 14, 2026</title>
+  <style>
+    :root{
+      --bg1:#ff545a;
+      --bg2:#fad0c4;
+      --card:rgba(255,255,255,0.22);
+      --card2:rgba(255,255,255,0.14);
+      --border:rgba(255,255,255,0.35);
+      --text:rgba(255,255,255,0.95);
+      --muted:rgba(255,255,255,0.78);
+      --accent:#f83141;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    .wrap{
+      width:min(940px, 92vw);
+      padding: 28px;
+      position:relative;
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 34px 32px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 22px 52px rgba(0,0,0,0.18);
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .sub{
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .timer{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .unit{
+      background: var(--card2);
+      border: 1px solid rgba(255,255,255,0.26);
+      border-radius: 22px;
+      padding: 16px 14px;
+      text-align:center;
+    }
+
+    .num{
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      text-shadow: 0 14px 30px rgba(0,0,0,0.12);
+    }
+
+    .lbl{
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.88;
+    }
+
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .status{
+      font-weight: 800;
+      color: var(--muted);
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      border-radius: 18px;
+      padding: 14px 18px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      cursor: pointer;
+      background: white;
+      color: var(--accent);
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:disabled{
+      opacity:0.55;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .btn:not(:disabled):hover{
+      transform: translateY(-1px);
+    }
+
+    .tiny{
+      margin-top: 14px;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      font-weight: 700;
+    }
+
+    .float{
+      position:absolute;
+      inset:-60px;
+      pointer-events:none;
+      opacity: 0.16;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.9), transparent 40%),
+        radial-gradient(circle at 78% 24%, rgba(255,255,255,0.75), transparent 40%),
+        radial-gradient(circle at 60% 82%, rgba(255,255,255,0.85), transparent 42%);
+      filter: blur(6px);
+    }
+
+    @media (max-width: 620px){
+      .card{ padding: 26px 20px; }
+      .timer{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .row{ justify-content: center; }
+      .status{ text-align:center; }
+      .wrap{ padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="float"></div>
+    <div class="card">
+      <h1>Locked Until Feb 14, 2026</h1>
+      <p class="sub">A tiny countdown for something sweet. When the timer hits zero, you can unlock it.</p>
+
+      <div class="timer" aria-label="Countdown timer">
+        <div class="unit">
+          <div class="num" id="days">00</div>
+          <div class="lbl">Days</div>
+        </div>
+        <div class="unit">
+          <div class="num" id="hours">00</div>
+          <div class="lbl">Hours</div>
+        </div>
+        <div class="unit">
+          <div class="num" id="mins">00</div>
+          <div class="lbl">Mins</div>
+        </div>
+        <div class="unit">
+          <div class="num" id="secs">00</div>
+          <div class="lbl">Secs</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="status" id="status">Unlock button will appear on Feb 14.</div>
+        <button class="btn" id="unlock" type="button" disabled>Unlock</button>
+      </div>
+
+      <div class="tiny">Tip: WAIT KARO 14TH FAB TAKK Muheheheheheee</div>
+    </div>
+  </div>
+
+  <script>
+    // Feb 14, 2026 00:00:00 (local time)
+    const TARGET = new Date(2026, 1, 14, 0, 0, 0, 0);
+
+    const elDays = document.getElementById("days");
+    const elHours = document.getElementById("hours");
+    const elMins = document.getElementById("mins");
+    const elSecs = document.getElementById("secs");
+    const elStatus = document.getElementById("status");
+    const btnUnlock = document.getElementById("unlock");
+
+    function pad2(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function update() {
+      const now = new Date();
+      const diff = TARGET.getTime() - now.getTime();
+
+      if (diff <= 0) {
+        elDays.textContent = "00";
+        elHours.textContent = "00";
+        elMins.textContent = "00";
+        elSecs.textContent = "00";
+        elStatus.textContent = "Unlocked. Tap the button.";
+        btnUnlock.disabled = false;
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / (24 * 60 * 60));
+      const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60));
+      const mins = Math.floor((totalSeconds % (60 * 60)) / 60);
+      const secs = totalSeconds % 60;
+
+      elDays.textContent = pad2(days);
+      elHours.textContent = pad2(hours);
+      elMins.textContent = pad2(mins);
+      elSecs.textContent = pad2(secs);
+    }
+
+    btnUnlock.addEventListener("click", () => {
+      // Opens the main surprise page in the same tab.
+      window.location.href = "main.html";
+    });
+
+    update();
+    setInterval(update, 250);
+  </script>
+</body>
+</html>
